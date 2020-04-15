@@ -35,6 +35,20 @@ export default function App() {
     setRepositories(newRepositories);
   }
 
+  async function handleUnlikeRepository(id) {
+    await api.delete(`/repositories/${id}/like`)
+
+    const newRepositories = repositories.map(repository => {
+      if(repository.id === id){
+        repository.likes--;
+      }
+
+      return repository;
+    });
+
+    setRepositories(newRepositories);
+  }
+
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor="#7159c1" />
@@ -69,6 +83,12 @@ export default function App() {
               testID={`like-button-${repository.id}`}
             >
               <Text style={styles.buttonText}>Curtir</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => handleUnlikeRepository(repository.id)}
+            >
+              <Text style={styles.buttonTextSub}>Deixar de curtir</Text>
             </TouchableOpacity>
           </View>
           )}
@@ -125,6 +145,14 @@ const styles = StyleSheet.create({
     marginRight: 10,
     color: "#fff",
     backgroundColor: "#7159c1",
+    padding: 15,
+  },
+  buttonTextSub: {
+    fontSize: 14,
+    fontWeight: "bold",
+    marginRight: 10,
+    color: "#fff",
+    backgroundColor: "red",
     padding: 15,
   },
 });
